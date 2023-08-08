@@ -46,7 +46,7 @@ class UserController extends Controller
                 return response()->json(['message' => 'Login successful', 'user' => $user, 'token' => $token]);
             }
     
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'Die Email Adresse oder das Passwort ist nicht korrekt.'], 401);
         } catch (ValidationException $e) {
             return response()->json(['error' => $e->errors()], 422);
         }
