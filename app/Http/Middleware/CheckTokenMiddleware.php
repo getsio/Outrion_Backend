@@ -5,13 +5,19 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class CheckTokenMiddleware
 {
     public function handle($request, Closure $next)
     {
-        if (!$request->bearerToken()) {
-            return response()->json(['error' => 'Unauthenticated. Missing or invalid token.'], 401);
+        // Hole das Token-Modell anhand des Token-IDs
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+
+        // Überprüfe, ob das Token-Modell gefunden wurde und gültig ist
+        if (!$token || $token->revoked) {
+            return response()->json(['error' => 'Unauthenticated. Invalid token.'], 401);
         }
 
         return $next($request);
