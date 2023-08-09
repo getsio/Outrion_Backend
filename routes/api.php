@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,5 +24,8 @@ Route::middleware('api')->group(function () {
     Route::get('/user', [UserController::class, 'getAuthenticatedUser']);
     Route::post('change-password', [UserController::class, 'changePassword']);
     Route::post('/logout', [UserController::class, 'logout']);
+    Route::post('/role', [RoleController::class, 'store']);
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::post('users/{user}/assign-role', [UserController::class, 'assignRole']);
   });
 });

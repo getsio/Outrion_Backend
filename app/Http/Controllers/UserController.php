@@ -97,4 +97,12 @@ class UserController extends Controller
             return response()->json(['message' => 'Kein aktuelles Token gefunden.'], 404);
         }
     }
+
+    public function assignRole(Request $request, $userId)
+    {
+        $user = User::findOrFail($userId);
+        $roleIds = $request->input('roles'); // Array mit ausgewählten Rollen-IDs
+        $user->roles()->sync($roleIds); // Synchronisieren der Rollen
+        return response()->json(['message' => 'Roles assigned'], 200);
+    }
 }
