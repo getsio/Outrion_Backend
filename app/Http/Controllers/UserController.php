@@ -59,7 +59,7 @@ class UserController extends Controller
 
     public function getAuthenticatedUser(Request $request)
     {
-        return response()->json(['user' => $request->user()]);
+        return response()->json($request->user());
     }
 
     public function changePassword(Request $request)
