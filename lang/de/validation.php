@@ -10,5 +10,6 @@ return [
         'string' => 'Das ":attribute" muss mindestens :min Zeichen lang sein.',
         'array' => 'Das ":attribute" muss mindestens :min Elemente haben.',
     ],
+    'regex' => '":attribute" ist nicht gültig.',
     // Weitere Übersetzungen für andere Validierungsregeln...
 ];

@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|string|unique:users,name', // Benutzername muss eindeutig sein
+                'name' => 'required|string|unique:users,name|regex:/^\S*$/', // Benutzername muss eindeutig sein
                 'email' => 'required|email|unique:users,email', // E-Mail-Adresse muss eindeutig sein
                 'password' => 'required|string|min:6',
             ]);
@@ -37,7 +37,7 @@ class UserController extends Controller
         try {
             $request->validate([
                 'email' => 'required|email',
-                'password' => 'required|string',
+                'password' => 'required|string|min:6',
             ]);
     
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
