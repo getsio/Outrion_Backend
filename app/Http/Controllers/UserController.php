@@ -88,9 +88,13 @@ class UserController extends Controller
 
     public function logout()
     {
-        $userTokens = Auth::user()->tokens();
-        $userTokens->delete();
-
-        return response()->json(['message' => 'Logout erfolgreich.'], 200);
+        $currentToken = request()->user()->currentAccessToken();
+    
+        if ($currentToken) {
+            $currentToken->delete();
+            return response()->json(['message' => 'Logout erfolgreich.'], 200);
+        } else {
+            return response()->json(['message' => 'Kein aktuelles Token gefunden.'], 404);
+        }
     }
 }
