@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -100,9 +101,59 @@ class UserController extends Controller
 
     public function assignRole(Request $request, $userId)
     {
-        $user = User::findOrFail($userId);
+        $user = User::find($userId);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
         $roleIds = $request->input('roles'); // Array mit ausgewählten Rollen-IDs
+        
+        // Überprüfung, ob alle ausgewählten Rollen-IDs existieren
+        $existingRoleIds = Role::whereIn('id', $roleIds)->pluck('id');
+        $nonExistingRoleIds = array_diff($roleIds, $existingRoleIds->toArray());
+
+        if (!empty($nonExistingRoleIds)) {
+            return response()->json(['message' => 'One or more roles do not exist'], 422);
+        }
+
         $user->roles()->sync($roleIds); // Synchronisieren der Rollen
         return response()->json(['message' => 'Roles assigned'], 200);
+    }
+
+    public function removeRole($userId, $roleId)
+    {
+        $user = User::find($userId);
+        $role = Role::find($roleId);
+
+        if (!$user && !$role) {
+            return response()->json(['message' => 'User and Role not found'], 404);
+        }
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+
+        $user->roles()->detach($role);
+        return response()->json(['message' => 'Role removed from user'], 200);
+    }
+
+    public function destroy($userId)
+    {
+        $user = User::find($userId);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        
+        //Löst den User von jeder Rolle
+        $user->roles()->detach(); 
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted'], 200);
     }
 }

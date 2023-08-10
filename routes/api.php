@@ -24,8 +24,13 @@ Route::middleware('api')->group(function () {
     Route::get('/user', [UserController::class, 'getAuthenticatedUser']);
     Route::post('change-password', [UserController::class, 'changePassword']);
     Route::post('/logout', [UserController::class, 'logout']);
-    Route::post('/role', [RoleController::class, 'store']);
-    Route::get('/roles', [RoleController::class, 'index']);
-    Route::post('users/{user}/assign-role', [UserController::class, 'assignRole']);
+    Route::middleware(['check.admin'])->group(function () {
+      Route::post('/role', [RoleController::class, 'store']);
+      Route::get('/roles', [RoleController::class, 'index']);
+      Route::post('users/{user}/assign-role', [UserController::class, 'assignRole']);
+      Route::delete('roles/{role}', [RoleController::class, 'destroy']);
+      Route::delete('users/{user}/roles/{role}', [UserController::class, 'removeRole']);
+      Route::delete('users/{user}', [UserController::class, 'destroy']);
+    });
   });
 });
