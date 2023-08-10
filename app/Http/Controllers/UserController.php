@@ -42,7 +42,7 @@ class UserController extends Controller
             ]);
     
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                $user = Auth::user();
+                $user = Auth::user()->load('roles');
                 $token = $user->createToken('api_token')->plainTextToken;
                 return response()->json(['message' => 'Login successful', 'user' => $user, 'token' => $token]);
             }
