@@ -20,8 +20,8 @@ Route::middleware('api')->group(function () {
   Route::post('/register', [UserController::class, 'register']);
   Route::post('/login', [UserController::class, 'login']);
   Route::middleware(['auth:sanctum', 'check.token'])->group(function () {
-    Route::get('/users', [UserController::class, 'getAllUsers']);
     Route::get('/user', [UserController::class, 'getAuthenticatedUser']);
+    Route::get('/user-with-roles', [UserController::class, 'getAuthenticatedUserRoles']);
     Route::post('change-password', [UserController::class, 'changePassword']);
     Route::post('/logout', [UserController::class, 'logout']);
     Route::middleware(['check.admin'])->group(function () {
@@ -31,6 +31,8 @@ Route::middleware('api')->group(function () {
       Route::delete('roles/{role}', [RoleController::class, 'destroy']);
       Route::delete('users/{user}/roles/{role}', [UserController::class, 'removeRole']);
       Route::delete('users/{user}', [UserController::class, 'destroy']);
+      Route::get('/users', [UserController::class, 'getAllUsers']);
+      Route::get('/users-with-roles', [UserController::class, 'indexWithRoles']);
     });
   });
 });

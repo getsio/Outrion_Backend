@@ -156,4 +156,19 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted'], 200);
     }
+
+    public function indexWithRoles()
+    {
+        $usersWithRoles = User::with('roles')->get();
+
+        return response()->json($usersWithRoles, 200);
+    }
+
+    public function getAuthenticatedUserRoles(Request $request)
+    {
+        $user = $request->user();
+        $userWithRoles = $user->load('roles'); // Lädt die Beziehung 'roles' des Benutzers
+    
+        return response()->json($userWithRoles, 200);
+    }
 }
