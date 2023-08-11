@@ -32,7 +32,7 @@ class UserController extends Controller
         }
     }
     
-
+    /*
     public function login(Request $request)
     {
         try {
@@ -52,6 +52,35 @@ class UserController extends Controller
             return response()->json(['error' => $e->errors()], 422);
         }
     }
+    */
+
+    public function login(Request $request)
+    {
+        try {
+            $request->validate([
+                'identifier' => 'required|string', // This can be either email or username
+                'password' => 'required|string|min:6',
+            ]);
+
+            $credentials = $request->only('identifier', 'password');
+            
+            // Check if the provided identifier is an email address
+            $field = filter_var($credentials['identifier'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+            $credentials[$field] = $credentials['identifier'];
+            unset($credentials['identifier']);
+
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user()->load('roles');
+                $token = $user->createToken('api_token')->plainTextToken;
+                return response()->json(['message' => 'Login successful', 'user' => $user, 'token' => $token]);
+            }
+
+            return response()->json(['message' => 'Die E-Mail-Adresse, der Benutzername oder das Passwort ist nicht korrekt.'], 401);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
+        }
+    }
+
 
     public function getAllUsers()
     {
