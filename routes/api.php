@@ -24,6 +24,7 @@ Route::middleware('api')->group(function () {
     Route::get('/user-with-roles', [UserController::class, 'getAuthenticatedUserRoles']);
     Route::post('change-password', [UserController::class, 'changePassword']);
     Route::post('/logout', [UserController::class, 'logout']);
+    Route::put('/user/{user}', [UserController::class, 'update']);
     Route::middleware(['check.admin'])->group(function () {
       Route::post('/role', [RoleController::class, 'store']);
       Route::get('/roles', [RoleController::class, 'index']);

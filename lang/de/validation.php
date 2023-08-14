@@ -11,5 +11,6 @@ return [
         'array' => 'Das ":attribute" muss mindestens :min Elemente haben.',
     ],
     'regex' => '":attribute" ist nicht gültig.',
+    'string' => '":attribute" muss ein String sein.',
     // Weitere Übersetzungen für andere Validierungsregeln...
 ];

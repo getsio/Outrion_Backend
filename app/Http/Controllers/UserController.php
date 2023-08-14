@@ -31,28 +31,6 @@ class UserController extends Controller
             return response()->json(['error' => $e->errors()], 422);
         }
     }
-    
-    /*
-    public function login(Request $request)
-    {
-        try {
-            $request->validate([
-                'email' => 'required|email',
-                'password' => 'required|string|min:6',
-            ]);
-    
-            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                $user = Auth::user()->load('roles');
-                $token = $user->createToken('api_token')->plainTextToken;
-                return response()->json(['message' => 'Login successful', 'user' => $user, 'token' => $token]);
-            }
-    
-            return response()->json(['message' => 'Die Email Adresse oder das Passwort ist nicht korrekt.'], 401);
-        } catch (ValidationException $e) {
-            return response()->json(['error' => $e->errors()], 422);
-        }
-    }
-    */
 
     public function login(Request $request)
     {
@@ -199,5 +177,31 @@ class UserController extends Controller
         $userWithRoles = $user->load('roles'); // Lädt die Beziehung 'roles' des Benutzers
     
         return response()->json($userWithRoles, 200);
+    }
+
+    
+    public function update(Request $request, $userId)
+    {
+        try {
+
+            $user = User::find($userId);
+    
+            if (!$user) {
+                return response()->json(['message' => 'User not found'], 404);
+            }
+
+            $data = $request->validate([
+                'name' => 'sometimes|required|string|unique:users,name|regex:/^\S*$/',
+                'email' => 'sometimes|required|email|unique:users,email',
+                'first_name' => 'sometimes|string',
+                'last_name' => 'sometimes|string',
+            ]);
+    
+            $user->update($data);
+        
+            return response()->json(['message' => 'User information updated successfully']);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
+        }
     }
 }
