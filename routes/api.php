@@ -34,6 +34,7 @@ Route::middleware('api')->group(function () {
       Route::delete('users/{user}', [UserController::class, 'destroy']);
       Route::get('/users', [UserController::class, 'getAllUsers']);
       Route::get('/users-with-roles', [UserController::class, 'indexWithRoles']);
+      Route::get('/users-by-initial/{initial}', [UserController::class, 'initial']);
     });
   });
 });

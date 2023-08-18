@@ -65,6 +65,13 @@ class UserController extends Controller
         return response()->json(User::all());
     }
 
+    public function initial($initial)
+    {
+        $users = User::where('name', 'LIKE', $initial . '%')->take(10)->get();
+
+        return response()->json($users);
+    }
+
     public function getAuthenticatedUser(Request $request)
     {
         return response()->json($request->user());
