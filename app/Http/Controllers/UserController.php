@@ -67,7 +67,7 @@ class UserController extends Controller
 
     public function initial($initial)
     {
-        $users = User::where('name', 'LIKE', $initial . '%')->take(10)->get();
+        $users = User::where('name', 'LIKE', $initial . '%')->with('roles')->take(10)->get();
 
         return response()->json($users);
     }
