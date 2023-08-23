@@ -45,4 +45,17 @@ class RoleController extends Controller
 
         return response()->json(['message' => 'Role deleted'], 200);
     }
+
+    public function getRole($roleId)
+    {
+        $role = Role::find($roleId);
+
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+
+        $roleWithUsers = $role->load('users');
+
+        return response()->json($roleWithUsers, 200);
+    }
 }

@@ -35,6 +35,7 @@ Route::middleware('api')->group(function () {
       Route::get('/users', [UserController::class, 'getAllUsers']);
       Route::get('/users-with-roles', [UserController::class, 'indexWithRoles']);
       Route::get('/users-by-initial/{initial}', [UserController::class, 'initial']);
+      Route::get('/role-with-user/{role}', [RoleController::class, 'getRole']);
     });
   });
 });
