@@ -13,6 +13,13 @@ class RoleController extends Controller
         $roles = Role::all();
         return response()->json($roles);
     }
+
+    public function indexWithUsers()
+    {
+        $rolesWithUsers = Role::with('users')->get();
+
+        return response()->json($rolesWithUsers, 200);
+    }
     
     public function store(Request $request)
     {

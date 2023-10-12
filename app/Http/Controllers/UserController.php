@@ -65,6 +65,13 @@ class UserController extends Controller
         return response()->json(User::all());
     }
 
+    public function indexWithRoles()
+    {
+        $usersWithRoles = User::with('roles')->get();
+
+        return response()->json($usersWithRoles, 200);
+    }
+
     public function initial($initial)
     {
         $users = User::where('name', 'LIKE', $initial . '%')->with('roles')->take(10)->get();
@@ -75,6 +82,14 @@ class UserController extends Controller
     public function getAuthenticatedUser(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    public function getAuthenticatedUserRoles(Request $request)
+    {
+        $user = $request->user();
+        $userWithRoles = $user->load('roles'); // Lädt die Beziehung 'roles' des Benutzers
+    
+        return response()->json($userWithRoles, 200);
     }
 
     public function changePassword(Request $request)
@@ -170,22 +185,6 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted'], 200);
     }
-
-    public function indexWithRoles()
-    {
-        $usersWithRoles = User::with('roles')->get();
-
-        return response()->json($usersWithRoles, 200);
-    }
-
-    public function getAuthenticatedUserRoles(Request $request)
-    {
-        $user = $request->user();
-        $userWithRoles = $user->load('roles'); // Lädt die Beziehung 'roles' des Benutzers
-    
-        return response()->json($userWithRoles, 200);
-    }
-
     
     public function update(Request $request, $userId)
     {

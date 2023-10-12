@@ -28,6 +28,7 @@ Route::middleware('api')->group(function () {
     Route::middleware(['check.admin'])->group(function () {
       Route::post('/role', [RoleController::class, 'store']);
       Route::get('/roles', [RoleController::class, 'index']);
+      Route::get('/roles-with-users', [RoleController::class, 'indexWithUsers']);
       Route::post('users/{user}/assign-role', [UserController::class, 'assignRole']);
       Route::delete('roles/{role}', [RoleController::class, 'destroy']);
       Route::delete('users/{user}/roles/{role}', [UserController::class, 'removeRole']);
