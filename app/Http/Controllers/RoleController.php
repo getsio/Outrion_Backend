@@ -43,9 +43,11 @@ class RoleController extends Controller
             return response()->json(['message' => 'Role not found'], 404);
         }
 
+        /*
         if ($role->users()->count() > 0) {
             return response()->json(['message' => 'Role is assigned to users, cannot delete'], 422);
         }
+        */
         
         //$role->users()->detach(); Löst die Rollen von jedem User
         $role->delete();
