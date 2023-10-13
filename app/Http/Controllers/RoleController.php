@@ -49,7 +49,8 @@ class RoleController extends Controller
         }
         */
         
-        //$role->users()->detach(); Löst die Rollen von jedem User
+        //Löst die Rollen von jedem User
+        $role->users()->detach(); 
         $role->delete();
 
         return response()->json(['message' => 'Role deleted'], 200);
